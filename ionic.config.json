@@ -1,0 +1,8 @@
+{
+  "name": "front",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "5b1a7f60"
+}

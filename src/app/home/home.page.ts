@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { RefresherCustomEvent } from '@ionic/angular';
-import { MessageComponent } from '../message/message.component';
-
 import { DataService, Message } from '../services/data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +10,29 @@ import { DataService, Message } from '../services/data.service';
 })
 export class HomePage {
   private data = inject(DataService);
-  constructor() {}
+  constructor(private router: Router) {}
 
   refresh(ev: any) {
     setTimeout(() => {
       (ev as RefresherCustomEvent).detail.complete();
     }, 3000);
+  }
+
+  viviendas(){
+    this.router.navigate(['/vivienda'])
+  }
+
+  medir(){
+    this.router.navigate(['/medir'])
+  }
+
+  zonas(){
+    this.router.navigate(['/zona'])
+  }
+
+  cerrarSesion(){
+    localStorage.setItem('token', '');
+    this.router.navigate(['/login'])
   }
 
   getMessages(): Message[] {

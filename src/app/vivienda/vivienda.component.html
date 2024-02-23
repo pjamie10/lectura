@@ -1,0 +1,38 @@
+<ion-toolbar mode="ios">
+  <ion-buttons slot="start">
+    <ion-back-button text="Volver" default-href="/home"></ion-back-button>
+  </ion-buttons>
+  <!-- <ion-title>Viviendas</ion-title> -->
+</ion-toolbar>
+<ion-content>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="abrirDatosvivienda(0)">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-list mode="ios" *ngIf="lstZonas">
+    <ion-list-header style="display: flex;">
+      <ion-label>{{zonaSeleccionada.nombre}} 🏘️</ion-label>
+      <ion-item>
+        <ion-select [(ngModel)]="zonaSeleccionada" (ionChange)="listarVivienda()">
+          <ion-select-option *ngFor="let zona of lstZonas" [value]="zona">
+            {{zona.nombre}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list-header>
+    <ion-item style="margin-top: 30px;"*ngFor="let vivienda of lstViviendas; let i = index">
+      <ion-col size="1" style="width: 5%;">
+        <ion-label>{{i+1}}</ion-label>
+      </ion-col>
+      <ion-col>
+        <ion-label>{{vivienda.direccion}}</ion-label>
+      </ion-col>
+      <ion-col size="2" style="display: flex; justify-content: space-between;">
+        <ion-icon name="create-outline" color="primary" (click)="abrirDatosvivienda(vivienda.id)"></ion-icon>
+        <ion-icon name="trash-outline" style="color: rgb(214, 12, 12);"></ion-icon>
+      </ion-col>
+    </ion-item>
+    <p style="margin-left: 20px;" *ngIf="lstViviendas.length === 0">No se han encontrado registros</p>
+  </ion-list>
+</ion-content>

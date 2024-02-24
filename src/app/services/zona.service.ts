@@ -25,8 +25,8 @@ export class ZonaService {
     return this.http.get<any>(`${this.API_URL}/listarGrupoVivienda`, { params });
   }
 
-  modificarZona(objGrupo: EGrupoVivienda): Observable<StatusResponse<EGrupoVivienda>> {
-    return this.http.put<StatusResponse<EGrupoVivienda>>(`${this.API_URL}/modificarGrupoVivienda`, objGrupo);
+  modificarZona(objGrupo: EGrupoVivienda): Observable<StatusResponse<number>> {
+    return this.http.put<StatusResponse<number>>(`${this.API_URL}/modificarGrupoVivienda`, objGrupo);
   }
 
 }

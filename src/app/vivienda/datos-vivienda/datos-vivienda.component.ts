@@ -116,7 +116,7 @@ export class DatosViviendaComponent{
         estado: true
       }
 
-      this.viviendaService.modificararVivienda(parametros).subscribe((response: { success: boolean; data: EVivienda }) =>{
+      this.viviendaService.modificararVivienda(parametros).subscribe((response: { success: boolean; data: number }) =>{
         if(response.success){
           this.mostrarToast('Vivienda modificada correctamente');
           this.router.navigate(['/vivienda']);

@@ -1,5 +1,5 @@
 import { EGrupoVivienda } from './../modelos/EGrupoVivienda';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component} from '@angular/core';
 import { TokenService } from '../services/token.service';
 import { ZonaService } from '../services/zona.service';
 import { AlertController, IonModal, ToastController } from '@ionic/angular';
@@ -23,7 +23,8 @@ export class ZonaComponent{
   descripcionEdicion = "";
   lstZonas!: EZona[];
   zonaSeleccionada!: EZona;
-  @ViewChild(IonModal) modal!: IonModal;
+  isModalOpen = false;
+
 
   constructor(
     private tokenService: TokenService,
@@ -37,25 +38,13 @@ export class ZonaComponent{
     this.listarZonas();
   }
 
-  cancel() {
-    this.modal.dismiss(null, 'cancel');
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
   }
 
-  confirm() {
-    this.modal.dismiss(null, 'confirm');
-  }
-
-  onWillDismiss(event: Event) {
-    const ev = event as CustomEvent<OverlayEventDetail<string>>;
-    if (ev.detail.role === 'confirm') {
-      this.modificarZona();
-    }
-  }
-
-  enviarZona(zona: EZona){
+  seleccionarZona(zona: EZona){
     this.zonaSeleccionada = zona;
     this.descripcionEdicion = this.zonaSeleccionada.nombre;
-    debugger
   }
 
   modificarZona(){
@@ -66,10 +55,11 @@ export class ZonaComponent{
         nombre: this.descripcionEdicion
       }
 
-      this.zonaService.modificarZona(parametros).subscribe((response: { success: boolean; data: EGrupoVivienda; messages?: MessageStatusResponse[]}) =>{
+      this.zonaService.modificarZona(parametros).subscribe((response: { success: boolean; messages?: MessageStatusResponse[]}) =>{
         if(response.success){
           this.mostrarToast('Zona modificada correctamente');
           this.descripcionEdicion = "";
+          this.setOpen(false);
           this.listarZonas();
         }else{
           if(response.messages){

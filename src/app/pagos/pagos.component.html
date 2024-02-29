@@ -1,0 +1,24 @@
+<ion-toolbar mode="ios">
+  <ion-buttons slot="start">
+    <ion-back-button text="Volver" default-href="/home"></ion-back-button>
+  </ion-buttons>
+  <!-- <ion-title>Viviendas</ion-title> -->
+</ion-toolbar>
+<ion-content>
+  <ion-card>
+    <ion-item>
+      <ion-input (ionInput)="buscar($event)"  placeholder="Buscar por propietario o dirección"></ion-input>
+    </ion-item>
+  </ion-card>
+  <ion-list [inset]="true">
+    <ion-item *ngFor="let historia of lstHistorial">
+      <ion-label>
+        <p>Dirección: {{historia.direccion}}</p>
+        <p>Propietario: {{historia.propietario}}</p>
+        <p>Fecha: {{historia.fecha | date: 'dd/MM/yyyy'}}</p>
+        <p>Comisón: {{historia.montoComision | number: '1.2-2'}}</p>
+      </ion-label>
+    </ion-item>
+    <p style="margin-left: 15px;" *ngIf="lstHistorial.length === 0">Aún no existen registros</p>
+  </ion-list>
+</ion-content>

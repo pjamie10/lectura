@@ -4,7 +4,8 @@ import { TokenService } from '../services/token.service';
 import { ZonaService } from '../services/zona.service';
 import { AlertController, IonModal, ToastController } from '@ionic/angular';
 import { MessageStatusResponse } from '../services/StatusResponse.model';
-import { OverlayEventDetail } from '@ionic/core/components';
+import { EManzana } from '../modelos/EManzana';
+import { ManzanaService } from '../services/manzana.service';
 
 interface EZona{
   id: number;
@@ -22,13 +23,20 @@ export class ZonaComponent{
   descripcion = "";
   descripcionEdicion = "";
   lstZonas!: EZona[];
+  lstManzanas!: EManzana[];
   zonaSeleccionada!: EZona;
   isModalOpen = false;
-
+  gestionManzanas = false;
+  edidiconManzanas = false;
+  decripcionManzana = "";
+  decripcionManzanaEdicion = "";
+  manzanaSeleccionada!: EManzana;
+  idZona!: number;
 
   constructor(
     private tokenService: TokenService,
     private zonaService: ZonaService,
+    private manzanaService: ManzanaService,
     private toastController: ToastController,
     private alertController: AlertController
   ) { }
@@ -42,9 +50,28 @@ export class ZonaComponent{
     this.isModalOpen = isOpen;
   }
 
+  abrirManzanas(isOpen: boolean, id: number) {
+    this.gestionManzanas = isOpen;
+    this.idZona = id
+    this.listarManzanas();
+  }
+
+  cerrarManzanas(isOpen: boolean) {
+    this.gestionManzanas = isOpen;
+  }
+
+  cerrarEdicionManzanas(isOpen: boolean) {
+    this.edidiconManzanas = isOpen;
+  }
+
   seleccionarZona(zona: EZona){
     this.zonaSeleccionada = zona;
     this.descripcionEdicion = this.zonaSeleccionada.nombre;
+  }
+
+  seleccionarManzana(manzana: EManzana){
+    this.manzanaSeleccionada = manzana;
+    this.decripcionManzanaEdicion = this.manzanaSeleccionada.descripcion;
   }
 
   modificarZona(){
@@ -102,11 +129,78 @@ export class ZonaComponent{
     }
   }
 
+  agregarManzana(){
+    if(this.decripcionManzana != ""){
+      let parametros: EManzana = {
+        id: 0,
+        idGrupoVivienda: this.idZona,
+        descripcion: this.decripcionManzana
+      }
+      this.manzanaService.insertarManzana(parametros).subscribe((response: { success: boolean; messages?: MessageStatusResponse[]}) =>{
+        if(response.success){
+          this.mostrarToast('Manzana registrada correctamente');
+          this.decripcionManzana = "";
+          this.listarManzanas();
+        }else{
+          if(response.messages){
+            this.mostrarAlert(response.messages[0].message);
+          }
+        }
+      },
+        (error: any) => {
+          this.mostrarToast('Ha ocurrido un error con los servicios');
+        });
+    }else{
+      this.mostrarToast('Debe escribir una descripción');
+    }
+  }
+
+  modificarManzana(){
+    if(this.decripcionManzanaEdicion != ""){
+      let parametros: EManzana = {
+        id: this.manzanaSeleccionada.id,
+        idGrupoVivienda: this.idZona,
+        descripcion: this.decripcionManzanaEdicion
+      }
+      this.manzanaService.modificarManzana(parametros).subscribe((response: { success: boolean; messages?: MessageStatusResponse[]}) =>{
+        if(response.success){
+          this.mostrarToast('Manzana editada correctamente');
+          this.decripcionManzanaEdicion = "";
+          this.cerrarEdicionManzanas(false)
+          this.listarManzanas();
+        }else{
+          if(response.messages){
+            this.mostrarAlert(response.messages[0].message);
+          }
+        }
+      },
+        (error: any) => {
+          this.mostrarToast('Ha ocurrido un error con los servicios');
+        });
+    }else{
+      this.mostrarToast('Debe escribir una descripción');
+    }
+  }
+
   listarZonas(){
     this.zonaService.listarZonas(this.userInfo.id)
     .subscribe((response: { success: boolean; data: EZona[]}) =>{
       if(response.success){
         this.lstZonas = response.data;
+      }
+    },
+      (error: any) => {
+        this.mostrarToast('Ha ocurrido un error con los servicios');
+      });
+  }
+
+  listarManzanas(){
+    this.manzanaService.listarManzana(this.idZona)
+    .subscribe((response: { success: boolean; data: EManzana[]}) =>{
+      if(response.success){
+        this.lstManzanas = response.data;
+      }else{
+        this.lstManzanas = []
       }
     },
       (error: any) => {

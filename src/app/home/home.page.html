@@ -2,22 +2,22 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-card mode="ios" (click)="viviendas()" class="card">
-          <ion-card-header>
-            <ion-card-title color="primary">Viviendas</ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-icon style="width: 100px; height: 100px;" color="primary" name="home-outline"></ion-icon>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-      <ion-col>
         <ion-card mode="ios" (click)="zonas()" class="card">
           <ion-card-header>
             <ion-card-title color="primary">Zonas</ion-card-title>
           </ion-card-header>
           <ion-card-content>
             <ion-icon style="width: 100px; height: 100px;" color="primary" name="golf-outline"></ion-icon>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col>
+        <ion-card mode="ios" (click)="viviendas()" class="card">
+          <ion-card-header>
+            <ion-card-title color="primary">Viviendas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-icon style="width: 100px; height: 100px;" color="primary" name="home-outline"></ion-icon>
           </ion-card-content>
         </ion-card>
       </ion-col>
@@ -34,16 +34,26 @@
         </ion-card>
       </ion-col>
       <ion-col>
-        <ion-card mode="ios" class="card" (click)="cerrarSesion()">
+        <ion-card mode="ios" class="card" (click)="pagos()">
           <ion-card-header>
-            <ion-card-title color="primary">Salir</ion-card-title>
+            <ion-card-title color="primary">Pagos</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <ion-icon style="width: 100px; height: 100px;" color="primary" name="log-out-outline"></ion-icon>
+            <ion-icon style="width: 100px; height: 100px;" color="primary" name="wallet-outline"></ion-icon>
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
+    <ion-col>
+      <ion-card mode="ios" class="card" (click)="cerrarSesion()">
+        <ion-card-header>
+          <ion-card-title color="primary">Salir</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-icon style="width: 100px; height: 100px;" color="primary" name="log-out-outline"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
   </ion-grid>
   <!-- <ion-list>
     <app-message *ngFor="let message of getMessages()" [message]="message"></app-message>

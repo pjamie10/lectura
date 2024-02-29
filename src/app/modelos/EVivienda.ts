@@ -1,8 +1,8 @@
 export interface EVivienda{
   id: number;
+  idManzana: string;
   nombrePropietario: string;
   direccion: string;
-  manzana: string;
   lote: string;
   idGrupoVivienda: number;
   estado: boolean;
@@ -11,8 +11,10 @@ export interface EVivienda{
 export interface EViviendaListado{
   id: number;
   nombrePropietario: string;
+  idManzana: number;
   direccion: string;
-  manzana: string;
+  lectura: string;
   lote: string;
   idGrupoVivienda: number;
+  estado: boolean;
 }

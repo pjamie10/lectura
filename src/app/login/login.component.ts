@@ -41,7 +41,7 @@ export class LoginComponent {
   }
 
   ngOnInit(){
-    localStorage.setItem('token', '');
+    localStorage.removeItem('token');
   }
 
   change(event: any){
@@ -51,7 +51,7 @@ export class LoginComponent {
   async mostrarLoading() {
     this.loading = await this.loadingController.create({
       message: 'Ingresando...',
-      duration: 500,
+      duration: 400,
     });
 
     await this.loading.present();
@@ -59,8 +59,11 @@ export class LoginComponent {
 
   login(){
     if(this.formData.valid){
+      this.mostrarLoading();
       this.isLoading = true
-      this.validarUsuario(this.formData.get('usuario')?.value, this.formData.get('password')?.value);
+      let usuario = this.formData.get('usuario')?.value
+      let contraseña = this.formData.get('password')?.value
+      this.validarUsuario(usuario, contraseña);
     }else{
       this.mostrarAlert('Revise los datos ingresados');
     }
@@ -70,10 +73,11 @@ export class LoginComponent {
     this.usuarioService.validarUsuario(usuario,clave)
     .subscribe((response: { success: boolean; data: string; messages?: MessageStatusResponse[]}) =>{
       if(response.success){
-        this.mostrarLoading();
         let token = response.data;
         localStorage.setItem('token', token);
         this.router.navigate(['/home']);
+        this.formData.get('usuario')?.setValue("");
+        this.formData.get('password')?.setValue("");
       }else{
         if(response.messages){
           this.mostrarAlert(response.messages[0].message);
@@ -100,9 +104,15 @@ export class LoginComponent {
       }
       this.usuarioService.insertarUsuario(parametros).subscribe((response: { success: boolean; data: EUsuario; }) =>{
         if(response.success){
-          this.router.navigate(['/home'])
+          this.validarUsuario(this.formRegister.get('usuario')?.value, this.formRegister.get('contraseña')?.value)
+          this.router.navigate(['/home']);
           this.mostrarToast('Se ha registrado correctamente');
-        }else{
+          this.formRegister.get('nombres')?.setValue("");
+          this.formRegister.get('apellidos')?.setValue("");
+          this.formRegister.get('dni')?.setValue("");
+          this.formRegister.get('usuario')?.setValue("");
+          this.formRegister.get('contraseña')?.setValue("");
+          this.change('signin')
         }
       },
         (error: any) => {

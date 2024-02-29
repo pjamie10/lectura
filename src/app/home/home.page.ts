@@ -22,6 +22,10 @@ export class HomePage {
     this.router.navigate(['/vivienda'])
   }
 
+  pagos(){
+    this.router.navigate(['/pagos'])
+  }
+
   medir(){
     this.router.navigate(['/medir'])
   }
@@ -31,7 +35,7 @@ export class HomePage {
   }
 
   cerrarSesion(){
-    localStorage.setItem('token', '');
+    localStorage.removeItem('token');
     this.router.navigate(['/login'])
   }
 

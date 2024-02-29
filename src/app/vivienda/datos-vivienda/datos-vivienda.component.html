@@ -15,14 +15,14 @@
           <ion-input fill="solid" formControlName="direccion" label="Dirección" placeholder="Dirección de propiedad"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-input fill="solid" label="Manzana" formControlName="manzana" placeholder="Ejemplo: m2 'A'"></ion-input>
-        </ion-item>
-        <ion-item>
           <ion-input fill="solid" label="Lote" placeholder="Ejemplo: Lt 05" formControlName="lote"></ion-input>
         </ion-item>
-        <ion-item style="width: 50%; margin-left: auto;">
-          <ion-select mode="ios" formControlName="idGrupoVivienda">
+        <ion-item>
+          <ion-select mode="ios" formControlName="idGrupoVivienda" (ionChange)="listarManzanas($event)">
             <ion-select-option *ngFor="let zona of lstZonas" [value]="zona.id">{{zona.nombre}}</ion-select-option>
+          </ion-select>
+          <ion-select mode="ios" formControlName="manzana">
+            <ion-select-option *ngFor="let manzana of lstManzanas" [value]="manzana.id">{{manzana.descripcion}}</ion-select-option>
           </ion-select>
         </ion-item>
         <ion-button (click)="guardarDatos()">Guardar</ion-button>

@@ -5,18 +5,23 @@
   <!-- <ion-title>Viviendas</ion-title> -->
 </ion-toolbar>
 <ion-content>
-    <div *ngIf="zonaSeleccionada" style="display: flex; justify-content: space-around;">
-      <ion-label style="margin-top: 10px;">{{zonaSeleccionada.nombre}} 🏘️</ion-label>
-      <ion-item>
-        <ion-select [(ngModel)]="zonaSeleccionada" (ionChange)="listarVivienda()">
-          <ion-select-option *ngFor="let zona of lstZonas" [value]="zona">
-            {{zona.nombre}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
-    </div>
+  <div *ngIf="zonaSeleccionada" style="display: flex; justify-content: space-around;">
+    <ion-label style="margin-top: 10px;">{{zonaSeleccionada.nombre}} 🏘️</ion-label>
+    <ion-item>
+      <ion-select [(ngModel)]="zonaSeleccionada" (ionChange)="listarManzanas(zonaSeleccionada.id);listarVivienda()">
+        <ion-select-option *ngFor="let zona of lstZonas" [value]="zona">
+          {{zona.nombre}}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-select mode="ios" [(ngModel)]="idManzana" (ionChange)="filtrarViviendas()">
+        <ion-select-option *ngFor="let manzana of lstManzanas" [value]="manzana.id">{{manzana.descripcion}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
   <ion-card mode="ios" *ngIf="viviendaActual">
-    <p style="margin-right: 10px; text-align: right;">{{posicion}} de {{lstViviendas.length}}</p>
+    <p style="margin-right: 10px; text-align: right;">{{posicion}} de {{lstFiltradas.length}}</p>
     <ion-list mode="ios" style="display: flex; flex-direction: column;">
       <ion-item>
         <ion-input label="Propietario" [value]="viviendaActual[0].propietario" readonly></ion-input>
@@ -28,13 +33,20 @@
         <ion-input fill="solid" label="Grupo" [value]="viviendaActual[0].zona" readonly></ion-input>
       </ion-item>
       <ion-item>
-        <ion-input fill="solid" label="Lectura anterior" [value]="viviendaActual[0].lecturaAnterior" readonly></ion-input>
+        <ion-label>Fecha</ion-label>
+        <input [(ngModel)]="fecha" type="date">
       </ion-item>
       <ion-item>
-        <ion-input type="number" fill="solid" label="Lectura actual" (input)="calcularComision()" [(ngModel)]="lectura" placeholder="Ingrese su lectura actual"></ion-input>
+        <ion-input fill="solid" label="Lectura anterior" [value]="viviendaActual[0].lectura" readonly></ion-input>
       </ion-item>
-      <p style="color: red; margin-left: 15px;">* Su comisión es {{comision}}</p>
+      <ion-item>
+        <ion-input type="number" fill="solid" label="Lectura actual" [(ngModel)]="lectura" placeholder="Ingrese su lectura actual"></ion-input>
+      </ion-item>
+      <!-- <p style="color: red; margin-left: 15px;">* Su comisión es {{comision}}</p> -->
       <ion-button (click)="guardar()">Continuar</ion-button>
     </ion-list>
+  </ion-card>
+  <ion-card mode="ios" *ngIf="!viviendaActual">
+    <p style="margin-left: 15px; color: red;">No existen viviendas registradas</p>
   </ion-card>
 </ion-content>

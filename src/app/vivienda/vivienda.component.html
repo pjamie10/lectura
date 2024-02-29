@@ -30,9 +30,12 @@
       </ion-col>
       <ion-col size="2" style="display: flex; justify-content: space-between;">
         <ion-icon name="create-outline" color="primary" (click)="abrirDatosvivienda(vivienda.id)"></ion-icon>
-        <ion-icon name="trash-outline" style="color: rgb(214, 12, 12);"></ion-icon>
+        <ion-icon name="trash-outline" style="color: rgb(214, 12, 12);" (click)="buscarYEliminar(vivienda.id)"></ion-icon>
       </ion-col>
     </ion-item>
     <p style="margin-left: 20px;" *ngIf="lstViviendas.length === 0">No se han encontrado registros</p>
   </ion-list>
+  <ion-card mode="ios" *ngIf="!lstZonas">
+    <p style="margin-left: 15px; color: red;">No existen zonas registradas</p>
+  </ion-card>
 </ion-content>

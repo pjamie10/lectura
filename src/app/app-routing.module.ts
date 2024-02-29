@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { ZonaComponent } from './zona/zona.component';
 import { AuthGuard } from './services/auth.guard';
+import { PagosComponent } from './pagos/pagos.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,11 @@ const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     loadChildren: () => import('./login/login.module').then( m => m.LoginModule)
+  },
+  {
+    path: 'pagos',
+    component: PagosComponent,
+    loadChildren: () => import('./pagos/pagos.module').then( m => m.PagosModule)
   },
   {
     path: 'zona',

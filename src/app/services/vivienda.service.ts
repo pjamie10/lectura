@@ -17,7 +17,7 @@ export class ViviendaService {
     return this.http.post<StatusResponse<EVivienda>>(`${this.API_URL}/insertarVivienda`, objVivienda);
   }
 
-  modificararVivienda(objVivienda: EVivienda): Observable<StatusResponse<number>> {
+  modificarVivienda(objVivienda: EVivienda): Observable<StatusResponse<number>> {
     return this.http.put<StatusResponse<number>>(`${this.API_URL}/modificarVivienda`, objVivienda);
   }
 

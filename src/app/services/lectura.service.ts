@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { ELecturaVivienda } from '../modelos/ELecturaVivienda';
+import { EHistorialLectura, ELecturaVivienda } from '../modelos/ELecturaVivienda';
 import { StatusResponse } from './StatusResponse.model';
 import { Observable } from 'rxjs';
 
@@ -23,5 +23,17 @@ export class LecturaService {
 
   modificarLectura(objLectura: ELecturaVivienda): Observable<StatusResponse<number>> {
     return this.http.put<StatusResponse<number>>(`${this.API_URL}/modificarLecturaVivienda`, objLectura);
+  }
+
+  insertarHistorialLectura(objHistorial: EHistorialLectura): Observable<StatusResponse<number>> {
+    return this.http.post<StatusResponse<number>>(`${this.API_URL}/insertarHistorialLectura`, objHistorial);
+  }
+
+  listarHistorialLectura(parametro: string, idUsuario: number) {
+    let params = new HttpParams();
+
+    params = params.append('parametro', parametro.toString());
+    params = params.append('idUsuario', idUsuario.toString());
+    return this.http.get<any>(`${this.API_URL}/listarHistorialLectura`, { params });
   }
 }

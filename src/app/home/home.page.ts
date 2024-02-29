@@ -36,7 +36,7 @@ export class HomePage {
 
   cerrarSesion(){
     localStorage.removeItem('token');
-    this.router.navigate(['/login'])
+    location.reload();
   }
 
   getMessages(): Message[] {

@@ -48,27 +48,32 @@ export class MedirComponent{
     private router: Router,
     private manzanaService: ManzanaService
   ) {
-    this.userInfo = this.tokenService.getDecodedToken();
     this.posicionesJSON = localStorage.getItem('posiciones');
     this.fecha = this.fechaActual.toISOString().split('T')[0]
+  }
+
+  ngOnInit(){
+    this.userInfo = this.tokenService.getDecodedToken();
   }
 
   async ngAfterViewInit() {
     if (this.userInfo.id) {
       await this.listarZonas()
+      await this.listarManzanas(this.zonaSeleccionada.id)
       await this.listarVivienda();
     }
   }
 
-  listarManzanas(id: number){
-    this.manzanaService.listarManzana(id)
-    .subscribe((response: { success: boolean; data: EManzana[]}) =>{
-      if(response.success){
+  async listarManzanas(id: number) {
+    try {
+      const response: { success: boolean; data: EManzana[] } = await this.manzanaService.listarManzana(id).toPromise();
+
+      if (response.success) {
         this.lstManzanas = response.data;
         this.idManzana = this.lstManzanas[0].id;
 
-        if(!this.posicionesJSON){
-          let lstPosiciones = []
+        if (!this.posicionesJSON) {
+          let lstPosiciones = [];
           for (const manzana of this.lstManzanas) {
             const id = manzana.id;
             const posicion = 0;
@@ -76,14 +81,13 @@ export class MedirComponent{
             lstPosiciones.push({ id, posicion });
           }
           localStorage.setItem('posiciones', JSON.stringify(lstPosiciones));
-        }else{
+        } else {
           this.posiciones = JSON.parse(this.posicionesJSON);
         }
       }
-    },
-      (error: any) => {
-        this.mostrarToast('Ha ocurrido un error con los servicios');
-      });
+    } catch (error) {
+      this.mostrarToast('Ha ocurrido un error con los servicios');
+    }
   }
 
   filtrarViviendas(){
@@ -116,7 +120,6 @@ export class MedirComponent{
       if (response.success) {
         this.lstZonas = response.data;
         this.zonaSeleccionada = this.lstZonas[0];
-        await this.listarManzanas(this.lstZonas[0].id);
       }
     } catch (error) {
     }

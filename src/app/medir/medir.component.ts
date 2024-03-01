@@ -28,9 +28,6 @@ export class MedirComponent{
   zonas!: EZona[];
   lstViviendas: EViviendaListado[] = [];
   viviendaActual!: ELecturaViviendaListado[];
-  posicionesJSON: any;
-  posiciones: any;
-  posicion!: number;
   lectura!: number | null;
   comision = 0;
   fechaActual = new Date();
@@ -38,6 +35,7 @@ export class MedirComponent{
   lstManzanas!: EManzana[];
   idManzana!: number;
   lstFiltradas:EViviendaListado[] = [];
+  indice = 0;
 
   constructor(
     private zonaService: ZonaService,
@@ -48,7 +46,6 @@ export class MedirComponent{
     private router: Router,
     private manzanaService: ManzanaService
   ) {
-    this.posicionesJSON = localStorage.getItem('posiciones');
     this.fecha = this.fechaActual.toISOString().split('T')[0]
   }
 
@@ -71,19 +68,6 @@ export class MedirComponent{
       if (response.success) {
         this.lstManzanas = response.data;
         this.idManzana = this.lstManzanas[0].id;
-
-        if (!this.posicionesJSON) {
-          let lstPosiciones = [];
-          for (const manzana of this.lstManzanas) {
-            const id = manzana.id;
-            const posicion = 0;
-
-            lstPosiciones.push({ id, posicion });
-          }
-          localStorage.setItem('posiciones', JSON.stringify(lstPosiciones));
-        } else {
-          this.posiciones = JSON.parse(this.posicionesJSON);
-        }
       }
     } catch (error) {
       this.mostrarToast('Ha ocurrido un error con los servicios');
@@ -93,19 +77,12 @@ export class MedirComponent{
   filtrarViviendas(){
     this.lstFiltradas = this.lstViviendas.filter(x => x.idManzana === this.idManzana);
     if(this.lstFiltradas.length > 0){
-      this.posicionesJSON = localStorage.getItem('posiciones');
-      this.posiciones = JSON.parse(this.posicionesJSON);
-      const objetoEncontrado = this.posiciones.find((item: any) => item.id === this.zonaSeleccionada.id);
-      this.posicion = objetoEncontrado.posicion + 1;
-      let idBuscar
-      if(this.lstFiltradas[objetoEncontrado.posicion]){
-        idBuscar = this.lstFiltradas[objetoEncontrado.posicion].id;
-        this.listarLecturaVivienda(idBuscar)
+      if(this.lstFiltradas[this.indice]){
+        this.listarLecturaVivienda(this.lstFiltradas[this.indice].id)
       }else{
-        const objeto = this.posiciones.find((item: any) => item.id === this.zonaSeleccionada.id);
-        objeto.posicion = 0;
-        localStorage.setItem('posiciones', JSON.stringify(this.posiciones));
+        this.indice = 0;
         this.router.navigate(['/home']);
+        this.listarVivienda()
         this.mostrarToast('Todos los datos se han guardado correctamente');
       }
     }else{
@@ -167,9 +144,7 @@ export class MedirComponent{
 
       if (response) {
         if (response.success) {
-          const objeto = this.posiciones.find((item: any) => item.id === this.zonaSeleccionada.id);
-          objeto.posicion++;
-          localStorage.setItem('posiciones', JSON.stringify(this.posiciones));
+          this.indice ++;
           this.listarVivienda();
         } else {
           console.error('Error en la respuesta: success es false');

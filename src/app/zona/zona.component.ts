@@ -134,7 +134,8 @@ export class ZonaComponent{
       let parametros: EManzana = {
         id: 0,
         idGrupoVivienda: this.idZona,
-        descripcion: this.decripcionManzana
+        descripcion: this.decripcionManzana,
+        estado: false
       }
       this.manzanaService.insertarManzana(parametros).subscribe((response: { success: boolean; messages?: MessageStatusResponse[]}) =>{
         if(response.success){
@@ -160,7 +161,8 @@ export class ZonaComponent{
       let parametros: EManzana = {
         id: this.manzanaSeleccionada.id,
         idGrupoVivienda: this.idZona,
-        descripcion: this.decripcionManzanaEdicion
+        descripcion: this.decripcionManzanaEdicion,
+        estado: true
       }
       this.manzanaService.modificarManzana(parametros).subscribe((response: { success: boolean; messages?: MessageStatusResponse[]}) =>{
         if(response.success){

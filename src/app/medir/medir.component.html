@@ -21,7 +21,7 @@
     </ion-item>
   </div>
   <ion-card mode="ios" *ngIf="viviendaActual">
-    <p style="margin-right: 10px; text-align: right;">{{posicion}} de {{lstFiltradas.length}}</p>
+    <p style="margin-right: 10px; text-align: right;">{{indice + 1}} de {{lstFiltradas.length}}</p>
     <ion-list mode="ios" style="display: flex; flex-direction: column;">
       <ion-item>
         <ion-input label="Propietario" [value]="viviendaActual[0].propietario" readonly></ion-input>
